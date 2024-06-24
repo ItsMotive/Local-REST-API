@@ -17,8 +17,8 @@ const getStudentById = (req, res) => {
 
     pool.query(queries.getStudentById, [id], (error, results) => {
         if (error) throw error;
-        res.status(200).json(results.rows)
-    })
+        res.status(200).json(results.rows);
+    });
 };
 
 const addStudent = (req, res) => {
@@ -39,8 +39,26 @@ const addStudent = (req, res) => {
     });
 };
 
+const removeStudent = (req, res) => {
+    const id = parseInt(req.params.id);
+
+    // Check if student is in db
+    pool.query(queries.getStudentById, [id], (error, results) => {
+        const noStudentFound = !results.rows.length;
+        if (noStudentFound) {
+            res.send("Student does not exist.")
+        }
+
+        pool.query(queries.removeStudent, [id], (error, results) => {
+            if (error) throw error;
+            res.status(200).send("Student Removed Successfully!");
+        })
+    });
+};
+
 module.exports = {
     getStudents,
     getStudentById,
     addStudent,
-}
+    removeStudent,
+};
