@@ -63,55 +63,6 @@ const removeStudent = (req, res) => {
     });
 };
 
-const updateStudentOriginal = (req, res) => {
-    const id = parseInt(req.params.id);
-    try {
-        
-    }
-    catch (error) {
-        return res.status(422).json({ Message: "Incorrect Request Body" } );
-    }
-
-    var { name, email, age, dob } = req.body;
-    var original_name;
-    var original_email;
-    var original_age;
-    var original_dob;
-
-    // Check if student is in db
-    pool.query(queries.getStudentById, [id], (error, results) => {
-        const noStudentFound = !results.rows.length;
-        if (noStudentFound) {
-            return res.send("Student does not exist.")
-        }
-
-        // Gets original data
-        pool.query(queries.getStudentById, [id], (error, results) => {
-            if (error) throw error;
-            original_name = results.rows[0].name;
-            original_email = results.rows[0].email;
-            original_age = results.rows[0].age;
-            original_dob = results.rows[0].dob;
-
-            // Set values
-            name = name || original_name;
-            email = email || original_email;
-            age = age || original_age;
-            dob = dob || original_dob;
-
-            // Runs the UPDATE query
-            pool.query(queries.updateStudent, [name, email, age, dob, id], (error, results) => {
-                if (error) {
-                    console.error('Error executing SQL Query', error);
-                    return res.status(500).json({ Message: "Internal Server Error"} );
-                };
-
-                return res.status(200).json({ Message: "Student Updated Successfully!" } );
-            });
-        });
-    });
-};
-
 const updateStudent = (req, res) => {
 
     // Initialize variables for use
