@@ -34,7 +34,6 @@ const addStudent = (req, res) => {
         pool.query(queries.addStudent, [name, email, age, dob], (error, results) => {
             if (error) throw error;
             res.status(201).send("Student Successful Created!");
-            console.log("Student Created"); 
         });
     });
 };
@@ -47,7 +46,7 @@ const removeStudent = (req, res) => {
         const noStudentFound = !results.rows.length;
         if (noStudentFound) {
             res.send("Student does not exist.")
-        }
+        };
 
         pool.query(queries.removeStudent, [id], (error, results) => {
             if (error) throw error;
@@ -56,9 +55,29 @@ const removeStudent = (req, res) => {
     });
 };
 
+const updateStudent = (req, res) => {
+    const id = parseInt(req.params.id);
+    const { name } = req.body;
+
+    // Check if student is in db
+    pool.query(queries.getStudentById, [id], (error, results) => {
+        const noStudentFound = !results.rows.length;
+        if (noStudentFound) {
+            res.send("Student does not exist.")
+        }
+
+        pool.query(queries.updateStudent, [name, id], (error, results) => {
+            if (error) throw error;
+            res.status(200);
+            res.send("Student Updated Successfully!");
+        });
+    });
+};
+
 module.exports = {
     getStudents,
     getStudentById,
     addStudent,
     removeStudent,
+    updateStudent,
 };
