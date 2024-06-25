@@ -2,7 +2,13 @@ const Pool = require('pg').Pool;
 
 const pool = new Pool({
     user: "postgres",
-    host: "host.docker.internal",
+
+    // Used for Docker
+    // host: "host.docker.internal",
+
+    // Used for Local Machine
+    host: "localhost",
+
     database: "students",
     password: "password",
     port: 5432,

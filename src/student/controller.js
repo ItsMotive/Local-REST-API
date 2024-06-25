@@ -1,6 +1,7 @@
 const { response } = require('express');
 const pool = require('../../db');
-const queries = require('./queries')
+const queries = require('./queries');
+const { Validator } = require('jsonschema');
 
 const getStudents = (req, res) => {
 
@@ -31,7 +32,7 @@ const addStudent = (req, res) => {
         }
 
         if (results.rows.length) {
-            return res.send("Email already exists.")
+            return res.json({ Message: "Email already exists." });
         }
 
         // Add student to db
@@ -63,8 +64,38 @@ const removeStudent = (req, res) => {
 };
 
 const updateStudent = (req, res) => {
+
+    // Initialize variables for use
+    var original_name;
+    var original_email;
+    var original_age;
+    var original_dob;
+
+    // Set variables for use
+    var { name, email, age, dob } = req.body;
     const id = parseInt(req.params.id);
-    const { name } = req.body;
+
+    // Format for expected request body
+    const schema = {
+        type: 'object',
+        properties: {
+            name: { type: ['string', 'null'] },
+            email: { type: ['string', 'null'], format: 'email' },
+            age: { type: ['integer', 'null'], minimum: 0 },
+            dob: { type: ['string', 'null'], format: 'date' }
+        },
+        required: ['name', 'email', 'age', 'dob']
+    };
+
+    // Create a Validator instance
+    const validator = new Validator();
+
+    // Validate the response body against the schema
+    const validation = validator.validate(req.body, schema);
+
+    if (!validation.valid) {
+        return res.status(422).json({ Message: "Incorrect Request Body" } );
+    }
 
     // Check if student is in db
     pool.query(queries.getStudentById, [id], (error, results) => {
@@ -73,9 +104,29 @@ const updateStudent = (req, res) => {
             return res.send("Student does not exist.")
         }
 
-        pool.query(queries.updateStudent, [name, id], (error, results) => {
+        // Gets original data
+        pool.query(queries.getStudentById, [id], (error, results) => {
             if (error) throw error;
-            return res.status(200).send("Student Updated Successfully!");
+            original_name = results.rows[0].name;
+            original_email = results.rows[0].email;
+            original_age = results.rows[0].age;
+            original_dob = results.rows[0].dob;
+
+            // Set values for query input
+            name = name || original_name;
+            email = email || original_email;
+            age = age || original_age;
+            dob = dob || original_dob;
+
+            // Runs the UPDATE query
+            pool.query(queries.updateStudent, [name, email, age, dob, id], (error, results) => {
+                if (error) {
+                    console.error('Error executing SQL Query', error);
+                    return res.status(500).json({ Message: "Internal Server Error"} );
+                };
+
+                return res.status(200).json({ Message: "Student Updated Successfully!" } );
+            });
         });
     });
 };
