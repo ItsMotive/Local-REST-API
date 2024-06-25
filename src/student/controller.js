@@ -7,7 +7,7 @@ const getStudents = (req, res) => {
     pool.query(queries.getStudents, (error, results) => {
 
         if (error) throw error;
-        res.status(200).json(results.rows);
+        return res.status(200).json(results.rows);
     });
 }
 
@@ -17,7 +17,7 @@ const getStudentById = (req, res) => {
 
     pool.query(queries.getStudentById, [id], (error, results) => {
         if (error) throw error;
-        res.status(200).json(results.rows);
+        return res.status(200).json(results.rows);
     });
 };
 
@@ -52,12 +52,12 @@ const removeStudent = (req, res) => {
     pool.query(queries.getStudentById, [id], (error, results) => {
         const noStudentFound = !results.rows.length;
         if (noStudentFound) {
-            res.send("Student does not exist.")
+            return res.send("Student does not exist.")
         };
 
         pool.query(queries.removeStudent, [id], (error, results) => {
             if (error) throw error;
-            res.status(200).send("Student Removed Successfully!");
+            return res.status(200).send("Student Removed Successfully!");
         })
     });
 };
@@ -70,13 +70,12 @@ const updateStudent = (req, res) => {
     pool.query(queries.getStudentById, [id], (error, results) => {
         const noStudentFound = !results.rows.length;
         if (noStudentFound) {
-            res.send("Student does not exist.")
+            return res.send("Student does not exist.")
         }
 
         pool.query(queries.updateStudent, [name, id], (error, results) => {
             if (error) throw error;
-            res.status(200);
-            res.send("Student Updated Successfully!");
+            return res.status(200).send("Student Updated Successfully!");
         });
     });
 };
