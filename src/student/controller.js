@@ -26,14 +26,21 @@ const addStudent = (req, res) => {
 
     // Check if email exists
     pool.query(queries.checkEmailExists, [email], (error, results) => {
+        if (error) {
+            return res.status(500).send("Error checking email.");
+        }
+
         if (results.rows.length) {
-            res.send("Email already exists.")
+            return res.send("Email already exists.")
         }
 
         // Add student to db
         pool.query(queries.addStudent, [name, email, age, dob], (error, results) => {
-            if (error) throw error;
-            res.status(201).send("Student Successful Created!");
+            if (error) {
+                return res.status(500).send("Error adding student.")
+            };
+            
+            return res.status(201).send("Student Successful Created!");
         });
     });
 };
