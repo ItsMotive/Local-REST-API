@@ -1,0 +1,24 @@
+version: "3"
+services:
+  node_app:
+    container_name: node_app
+    image: my-node-app
+    ports: 
+      - 3000:3000
+    environment:
+      - PG_DB=students
+      - PG_USER=postgres
+      - PG_PASSWORD=password
+      - PG_HOST=node_db
+    depends_on:
+      - node_db
+
+  node_db: 
+    container_name: node_db
+    image: postgres:16
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=students
+    ports:
+      - 5432:5432
