@@ -12,4 +12,8 @@ app.get("/", (req, res) => {
 
 app.use('/api/v1/students', studentRoutes)
 
+app.use((req, res) => {
+    res.status(404).send("The requested URL was not found")
+});
+
 app.listen(port, () => console.log(`App listening on port ${port}`));
