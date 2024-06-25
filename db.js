@@ -4,10 +4,10 @@ const pool = new Pool({
     user: "postgres",
 
     // Used for Docker
-    // host: "host.docker.internal",
+    host: "host.docker.internal",
 
     // Used for Local Machine
-    host: "localhost",
+    // host: "localhost",
 
     database: "students",
     password: "password",

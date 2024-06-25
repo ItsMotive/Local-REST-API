@@ -8,7 +8,13 @@ const getStudents = (req, res) => {
     pool.query(queries.getStudents, (error, results) => {
 
         if (error) throw error;
-        return res.status(200).json(results.rows);
+
+        const response = {
+            Message: "Successfully Grabbed Data",
+            Data: results.rows
+        }
+
+        return res.status(200).json(response);
     });
 }
 
