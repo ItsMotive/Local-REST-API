@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
     res.send("Hello World")
 });
 
-app.use('/api/v1/students', studentRoutes)
+app.use('/api/v1', studentRoutes)
 
 app.use((req, res) => {
     res.status(404);
