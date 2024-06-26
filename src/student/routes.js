@@ -4,10 +4,19 @@ const controller = require('./controller');
 
 const router = Router();
 
-router.get("/", controller.getStudents);
-router.post("/", controller.addStudent);
-router.get("/:id", controller.getStudentById);
-router.put("/:id", controller.updateStudent);
-router.delete("/:id", controller.removeStudent);
+// Middleware to validate ID parameter
+const validateId = (req, res, next) => {
+    const id = req.params.id;
+    if (!/^\d+$/.test(id)) {
+        return res.status(400).json({ error: 'Invalid ID' });
+    }
+    next();
+};
+
+router.get("/students", controller.getStudents);
+router.post("/student", controller.addStudent);
+router.get("/student/:id", validateId, controller.getStudentById);
+router.put("/student/:id", validateId, controller.updateStudent);
+router.delete("/student/:id", validateId, controller.removeStudent);
 
 module.exports = router;
