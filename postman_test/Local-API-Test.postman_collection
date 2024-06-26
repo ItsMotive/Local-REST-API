@@ -1,0 +1,545 @@
+{
+	"info": {
+		"_postman_id": "99fde6df-f4ab-4b6e-994b-22317f7793c5",
+		"name": "Local API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36525943"
+	},
+	"item": [
+		{
+			"name": "Error 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().Message;\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"The requested URL was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/asda",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"asda"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valid GET students",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().message;\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"Successfully Grabbed Data\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/students",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid GET student/id (Characters)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().error;\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"Invalid ID\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/student/asdasd",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"asdasd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid GET student/id (Symbols)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().error;\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"Invalid ID\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/student/@*&#*(@&",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"@*&"
+					],
+					"hash": "*(@&"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valid GET /student/1 (Id = 1)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().message;\r",
+							"let responseName = pm.response.json().data[0].name;\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"Successfully Grabbed Data\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Name\", function () {\r",
+							"    pm.expect(responseName).to.equal(\"Josh\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/student/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid POST /student (Duplicate Email)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().message;\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"Email already exists.\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Josh\",\r\n    \"email\": \"joe@gmail.com\",\r\n    \"age\": 48,\r\n    \"dob\": \"1973-04-04\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/student",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"student"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().message;\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"Student Successfully Created!\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"email\": \"{{$randomFirstName}}@gmail.com\",\r\n    \"age\": 21,\r\n    \"dob\": \"2003-05-03\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/student/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid DELETE /student/id (Id too long)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().message;\r",
+							"\r",
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"Id is too long!\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/student/99999999999999",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"99999999999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid DELETE /student/id (Missing Student)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().message;\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"Student does not exist.\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/student/999999999",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"999999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().message;\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"Student Removed Successfully!\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/student/14",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"14"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid PUT (Invalid Payload)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().message;\r",
+							"\r",
+							"pm.test(\"Status code is 422\", function () {\r",
+							"    pm.response.to.have.status(422);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"Incorrect Request Body\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": null,\r\n    \"email\": \"Alberta@gmail.com\",\r\n    \"age\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/student/13",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"13"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseMessage = pm.response.json().message;\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Message\", function () {\r",
+							"    pm.expect(responseMessage).to.equal(\"Student Updated Successfully!\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": null,\r\n    \"email\": \"Alberta@gmail.com\",\r\n    \"age\": null,\r\n    \"dob\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/student/13",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"student",
+						"13"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
