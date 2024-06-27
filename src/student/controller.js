@@ -1,6 +1,7 @@
 const { response } = require('express');
 const pool = require('../../db');
 const queries = require('./queries');
+const c = require('./constants');
 const { Validator } = require('jsonschema');
 
 // Create a Validator instance
@@ -29,7 +30,7 @@ const getStudents = (req, res) => {
         if (error) throw error;
 
         const response = {
-            message: "Successfully Grabbed Data",
+            message: c.SUCCESS_FILE_GRAB,
             data: results.rows
         }
 
